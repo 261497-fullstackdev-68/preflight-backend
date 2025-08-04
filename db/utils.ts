@@ -8,8 +8,6 @@ const dbName = process.env.POSTGRES_DB;
 
 if (!dbUser || !dbPassword || !dbHost || !dbName || !dbName) {
   throw new Error("Invalid DB env.");
-} else {
-  console.log("pass");
 }
 
 export const connectionString = `postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`;

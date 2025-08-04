@@ -32,7 +32,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_HOST=pf-db
-
       - BACK_END_PORT=${BACK_END_PORT}
     depends_on:
       - db
