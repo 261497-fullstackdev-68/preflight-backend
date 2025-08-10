@@ -18,7 +18,10 @@ export const userTable = pgTable("user", {
   username: varchar("username", { length: 50 }).notNull().unique(),
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    precision: 2,
+  }).defaultNow(),
 });
 
 export const todoTable = pgTable("todo", {
@@ -29,9 +32,9 @@ export const todoTable = pgTable("todo", {
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   isDone: boolean("is_done").default(false),
-  startDate: timestamp("start_date"),
+  startDate: timestamp("start_date", { withTimezone: true, precision: 2 }),
   imagePath: varchar("image_path", { length: 255 }),
-  endDate: timestamp("end_date"),
+  endDate: timestamp("end_date", { withTimezone: true, precision: 2 }),
 });
 
 export const shareTodoTable = pgTable("share_todo", {
@@ -42,6 +45,9 @@ export const shareTodoTable = pgTable("share_todo", {
   shareWith: integer("share_with")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    precision: 2,
+  }).defaultNow(),
   isAccepted: acceptedEnum("is_accepted").default("Pending"),
 });
