@@ -1,6 +1,5 @@
-import { dbClient } from "./client.js"; // Assuming your Drizzle DB connection is in a db.ts file
-import { shareTodoTable, todoTable, userTable } from "./schema.js"; // Your Drizzle schema
-import { acceptedEnum } from "./schema.js";
+import { dbClient } from "./client.js";
+import { shareTodoTable, todoTable, userTable } from "./schema.js";
 import { faker } from "@faker-js/faker";
 
 // A simple function to generate a password hash (for demonstration)
@@ -15,16 +14,18 @@ async function main() {
 
     // --- Step 1: Clean up existing data to prevent duplicates ---
     console.log("🗑️ Deleting old data...");
+    // Deleting shareTodoTable first to satisfy foreign key constraints
     await dbClient.delete(shareTodoTable);
     await dbClient.delete(todoTable);
     await dbClient.delete(userTable);
+    console.log("✅ Old data deleted successfully.");
 
-    // --- Step 2: Seed Users ---
-    const users = Array.from({ length: 5 }, (_, i) => ({
+    // --- Step 2: Seed 5 Users ---
+    const users = Array.from({ length: 5 }, () => ({
       username: faker.internet.userName(),
       passwordHash: generatePasswordHash("password123"),
       isActive: true,
-      createdAt: faker.date.past().toISOString(),
+      createdAt: faker.date.past(),
     }));
 
     console.log("👤 Inserting 5 users...");
@@ -34,15 +35,15 @@ async function main() {
       .returning();
     console.log("✅ Users seeded successfully.");
 
-    // --- Step 3: Seed Todos (3 for each user) ---
+    // --- Step 3: Seed 4 Todos for each user ---
     const todos = insertedUsers.flatMap((user) =>
-      Array.from({ length: 3 }, () => ({
+      Array.from({ length: 4 }, () => ({
         userId: user.id,
         title: faker.lorem.sentence(3),
         description: faker.lorem.paragraph(),
         isDone: faker.datatype.boolean(),
-        startDate: faker.date.soon().toISOString(),
-        endDate: faker.date.future().toISOString(),
+        startDate: faker.date.soon(),
+        endDate: faker.date.future(),
         imagePath: faker.image.url(),
       }))
     );
@@ -52,52 +53,10 @@ async function main() {
       .insert(todoTable)
       .values(todos)
       .returning();
-    console.log("✅ Todos seeded successfully.");
+    console.log(`✅ ${insertedTodos.length} todos seeded successfully.`);
 
-    // --- Step 4: Seed Shared Todos ---
-    console.log("🤝 Sharing some todos...");
-    const sharedTodos = insertedTodos
-      .slice(0, 3) // Pick a few todos to share
-      .map((todo, index) => {
-        const sharer = insertedUsers.find((user) => user.id === todo.userId);
-        const shareWithUser = insertedUsers[(index + 1) % insertedUsers.length]; // Share with the next user in the list
-
-        // Ensure a user doesn't share a todo with themselves
-        if (sharer?.id === shareWithUser?.id) {
-          return null;
-        }
-
-        let isAccepted: (typeof acceptedEnum.enumValues)[number] = "Pending";
-        if (index === 0) {
-          isAccepted = "True"; // Mark the first shared todo as accepted
-        } else if (index === 1) {
-          isAccepted = "False"; // Mark the second as declined
-        }
-
-        return {
-          taskId: todo.id,
-          shareWith: shareWithUser?.id,
-          createdAt: faker.date.past().toISOString(),
-          isAccepted,
-        };
-      })
-      .filter(
-        (
-          todo
-        ): todo is {
-          taskId: number;
-          shareWith: number;
-          createdAt: string;
-          isAccepted: (typeof acceptedEnum.enumValues)[number];
-        } => todo !== null
-      ); // Remove any null entries from the array
-
-    if (sharedTodos.length > 0) {
-      await dbClient.insert(shareTodoTable).values(sharedTodos);
-      console.log(`✅ ${sharedTodos.length} todos shared successfully.`);
-    } else {
-      console.log("⚠️ No todos were shared.");
-    }
+    // --- Step 4: Skip Seeding Shared Todos as requested ---
+    console.log("🤝 Skipping shared todos as per the request.");
 
     console.log("✅ Seeding complete!");
   } catch (error) {
