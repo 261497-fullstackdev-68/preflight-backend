@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { dbClient } from "@db/client.js";
 import { userTable } from "@db/schema.js";
+import { todoTable } from "@db/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 // import cors from "cors";
@@ -115,35 +116,40 @@ app.get("/users", async (req, res) => {
   return res.json(allUsers);
 });
 
-//add
-// app.post("/create", async (req, res, next) => {
-//   try {
-//     const { user_id, title, description, startDate, endDate, imagePath } = req.body;
+app.get("/todo/:userId", async (req, res) => {
+  const userTodo = await dbClient.select().from(userTable).where(eq(userTable.id, Number(req.params.userId)));
+  return res.json(userTodo);
+});
 
-//     if (!user_id || !title) {
-//       return res.status(400).json({ error: "user_id and title are required" });
-//     }
+// add
+app.post("/create", async (req, res, next) => {
+  try {
+    const { userId, title, description, startDate, endDate, imagePath } = req.body;
 
-//     const result = await dbClient
-//       .insert(todoTable)
-//       .values({
-//         user_id,
-//         title,
-//         description: description ?? null,
-//         startDate: startDate ?? null,
-//         endDate: endDate ?? null,
-//         imagePath: imagePath ?? null,
-//       })
-//       .returning();
+    if (!userId || !title) {
+      return res.status(400).json({ error: "userId and title are required" });
+    }
 
-//     res.json({
-//       msg: "Insert successfully",
-//       data: result[0],
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+    const result = await dbClient
+      .insert(todoTable)
+      .values({
+        userId,
+        title,
+        description: description ?? null,
+        startDate: startDate ?? null,
+        endDate: endDate ?? null,
+        imagePath: imagePath ?? null,
+      })
+      .returning();
+
+    res.json({
+      msg: "Insert successfully",
+      data: result[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 app.listen(port, () => {
