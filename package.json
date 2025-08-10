@@ -7,6 +7,7 @@
     "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js",
     "seed": "node ./dist/db/seeder.js",
+    "seed": "node ./dist/db/seeder.js",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate"
   },
