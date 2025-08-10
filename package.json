@@ -8,7 +8,8 @@
     "start": "node ./dist/src/index.js",
     "seed": "node ./dist/db/seeder.js",
     "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate"
+    "db:migrate": "npx drizzle-kit migrate",
+    "test": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,10 @@
   "type": "module",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
+    "@tsconfig/node-lts": "^22.0.2",
+    "@tsconfig/node-ts": "^23.6.1",
     "bcrypt": "^6.0.0",
+    "cypress": "^14.5.4",
     "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
