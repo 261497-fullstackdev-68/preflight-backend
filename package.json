@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "seed": "node ./dist/db/seeder.js",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate"
   },
   "repository": {
     "type": "git",
@@ -21,17 +22,22 @@
   "homepage": "https://github.com/261497-fullstackdev-68/preflight-backend#readme",
   "type": "module",
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
+    "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "pnpm": "^10.14.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",
     "@types/pg": "^8.15.5",
-    "drizzle-kit": "^0.31.4",
     "postgres": "^3.4.7",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",

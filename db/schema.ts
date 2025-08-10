@@ -9,6 +9,7 @@ import {
   integer,
 } from "drizzle-orm/pg-core";
 
+// ENUM สำหรับ is_accepted
 export const acceptedEnum = pgEnum("is_accepted", ["True", "False", "Pending"]);
 
 export const userTable = pgTable("user", {
