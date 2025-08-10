@@ -12,13 +12,8 @@
     {
       "idx": 1,
       "version": "7",
-<<<<<<< HEAD
-      "when": 1754736996914,
-      "tag": "0001_small_lionheart",
-=======
       "when": 1754758827103,
       "tag": "0001_warm_tyger_tiger",
->>>>>>> bd88d0d3ea90cc5d4d6fb2aa1aecc864a12b04c5
       "breakpoints": true
     }
   ]
