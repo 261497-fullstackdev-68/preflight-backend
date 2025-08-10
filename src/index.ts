@@ -7,7 +7,8 @@ import { todoTable } from "@db/schema.js";
 
 const app = express();
 const port = process.env.BACK_END_PORT || 3000;
-app.use(express.json());
+
+app.use(express.json())
 
 app.get("/", (req, res) => {
   res.send("Hello from the backend!");
@@ -19,18 +20,18 @@ app.get("/users", async (req, res) => {
 });
 
 //add
-app.put("/todo/create", async (req, res, next) => {
+app.post("/create", async (req, res, next) => {
   try {
-    const { userId, title, description, startDate, endDate, imagePath } = req.body;
+    const { user_id, title, description, startDate, endDate, imagePath } = req.body;
 
-    if (!userId || !title) {
-      return res.status(400).json({ error: "userId and title are required" });
+    if (!user_id || !title) {
+      return res.status(400).json({ error: "user_id and title are required" });
     }
 
     const result = await dbClient
       .insert(todoTable)
       .values({
-        userId,
+        user_id,
         title,
         description: description ?? null,
         startDate: startDate ?? null,
