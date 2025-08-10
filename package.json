@@ -23,6 +23,7 @@
   "type": "module",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
@@ -31,6 +32,7 @@
     "pnpm": "^10.14.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",
     "@types/pg": "^8.15.5",
