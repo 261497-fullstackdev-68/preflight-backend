@@ -7,7 +7,6 @@
     "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js",
     "seed": "node ./dist/db/seeder.js",
-    "seed": "node ./dist/db/seeder.js",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate"
   },
@@ -28,7 +27,8 @@
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "pnpm": "^10.14.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
