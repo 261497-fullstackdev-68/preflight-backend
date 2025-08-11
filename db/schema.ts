@@ -1,4 +1,5 @@
 import {
+  timestamp,
   pgTable,
   serial,
   varchar,
@@ -7,7 +8,6 @@ import {
   date,
   pgEnum,
   integer,
-  timestamp,
 } from "drizzle-orm/pg-core";
 
 // ENUM สำหรับ is_accepted
