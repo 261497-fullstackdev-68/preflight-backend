@@ -18,14 +18,15 @@ CREATE TABLE "todo" (
 	"end_date" date
 );
 --> statement-breakpoint
-ALTER TABLE "user" DROP CONSTRAINT "user_email_unique";--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "username" varchar(50) NOT NULL;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "password_hash" varchar(255) NOT NULL;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "is_active" boolean DEFAULT true;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "created_at" date DEFAULT now();--> statement-breakpoint
+CREATE TABLE "user" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"username" varchar(50) NOT NULL,
+	"password_hash" varchar(255) NOT NULL,
+	"is_active" boolean DEFAULT true,
+	"created_at" date DEFAULT now(),
+	CONSTRAINT "user_username_unique" UNIQUE("username")
+);
+--> statement-breakpoint
 ALTER TABLE "share_todo" ADD CONSTRAINT "share_todo_task_id_todo_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."todo"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "share_todo" ADD CONSTRAINT "share_todo_share_with_user_id_fk" FOREIGN KEY ("share_with") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "todo" ADD CONSTRAINT "todo_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN "name";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN "email";--> statement-breakpoint
-ALTER TABLE "user" ADD CONSTRAINT "user_username_unique" UNIQUE("username");
+ALTER TABLE "todo" ADD CONSTRAINT "todo_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;

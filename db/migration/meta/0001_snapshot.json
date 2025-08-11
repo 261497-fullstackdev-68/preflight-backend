@@ -1,6 +1,6 @@
 {
-  "id": "b05b9054-bed2-43ba-9d82-8b42d814f0cb",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ebbffb71-74c0-411b-9afc-dc6cc276df88",
+  "prevId": "b05b9054-bed2-43ba-9d82-8b42d814f0cb",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,7 +28,7 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "date",
+          "type": "timestamp (2) with time zone",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -114,7 +114,7 @@
         },
         "start_date": {
           "name": "start_date",
-          "type": "date",
+          "type": "timestamp (2) with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -126,7 +126,7 @@
         },
         "end_date": {
           "name": "end_date",
-          "type": "date",
+          "type": "timestamp (2) with time zone",
           "primaryKey": false,
           "notNull": false
         }
@@ -184,7 +184,7 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "date",
+          "type": "timestamp (2) with time zone",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
