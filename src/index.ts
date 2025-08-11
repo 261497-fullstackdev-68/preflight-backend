@@ -4,14 +4,14 @@ import { dbClient } from "@db/client.js";
 import { userTable } from "@db/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
-// import cors from "cors";
-
+import { TodoRoutes } from './shareTodoApi.js';
 const app = express();
 const port = process.env.BACK_END_PORT || 3000;
 
 // ให้ Express อ่าน JSON body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+TodoRoutes(app);
 
 // เปิด CORS เพื่อให้ frontend เชื่อมต่อได้
 // app.use(cors({
@@ -114,6 +114,8 @@ app.get("/users", async (req, res) => {
   const allUsers = await dbClient.select().from(userTable);
   return res.json(allUsers);
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
