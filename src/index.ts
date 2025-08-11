@@ -6,8 +6,15 @@ import { todoTable } from "@db/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { TodoRoutes } from './shareTodoApi.js';
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
+import dayjs from "dayjs";
 const app = express();
 const port = process.env.BACK_END_PORT || 3000;
+
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // ให้ Express อ่าน JSON body
 app.use(express.json());
@@ -116,10 +123,28 @@ app.get("/users", async (req, res) => {
   return res.json(allUsers);
 });
 
+
+
 app.get("/todo/:userId", async (req, res) => {
-  const userTodo = await dbClient.select().from(userTable).where(eq(userTable.id, Number(req.params.userId)));
-  return res.json(userTodo);
+  const userTodos = await dbClient
+    .select()
+    .from(todoTable)
+    .where(eq(todoTable.userId, Number(req.params.userId)));
+
+  // แปลงเวลาจาก UTC เป็น Asia/Bangkok แบบ string ISO (local time)
+  const convertedTodos = userTodos.map((todo) => ({
+    ...todo,
+    startDate: todo.startDate
+      ? dayjs.utc(todo.startDate).tz("Asia/Bangkok").format()
+      : null,
+    endDate: todo.endDate
+      ? dayjs.utc(todo.endDate).tz("Asia/Bangkok").format()
+      : null,
+  }));
+
+  return res.json(convertedTodos);
 });
+
 
 // add
 app.post("/create", async (req, res, next) => {
@@ -136,8 +161,8 @@ app.post("/create", async (req, res, next) => {
         userId,
         title,
         description: description ?? null,
-        startDate: startDate ?? null,
-        endDate: endDate ?? null,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
         imagePath: imagePath ?? null,
       })
       .returning();
