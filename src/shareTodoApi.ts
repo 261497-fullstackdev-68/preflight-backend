@@ -3,6 +3,9 @@ import { dbClient } from "@db/client.js";
 import { shareTodoTable } from "@db/schema.js";
 import { and, eq, inArray } from "drizzle-orm";
 import { todoTable } from "@db/schema.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+
 
 export function TodoRoutes(app: Express) {
   app.post("/todos/shareTodo", async (req, res) => {
@@ -41,13 +44,22 @@ export function TodoRoutes(app: Express) {
     }
 
     try {
-      // Drizzle ORM query to select all todos where the 'id' is in the list
       const todos = await dbClient
         .select()
         .from(todoTable)
         .where(inArray(todoTable.id, task_id_list));
 
-      res.json(todos);
+
+        const convertedTodos = todos.map((todo) => ({
+            ...todo,
+            startDate: todo.startDate
+              ? dayjs.utc(todo.startDate).tz("Asia/Bangkok").format()
+              : null,
+            endDate: todo.endDate
+              ? dayjs.utc(todo.endDate).tz("Asia/Bangkok").format()
+              : null,
+          }));
+      res.json(convertedTodos);
     } catch (error) {
       console.error("Error fetching todos:", error);
       res.status(500).json({
