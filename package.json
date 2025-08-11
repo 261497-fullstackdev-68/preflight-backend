@@ -9,9 +9,11 @@
     "seed": "node ./dist/db/seeder.js",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "test": "cypress open",
     "dev": "vite",
-    "cy:open": "start-server-and-test dev http://localhost:5173 test"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:open": "start-server-and-test dev http://localhost:5173 cypress:open",
+    "test:run": "start-server-and-test dev http://localhost:5173 cypress:run"
   },
   "repository": {
     "type": "git",
