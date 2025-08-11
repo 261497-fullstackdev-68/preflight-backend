@@ -176,6 +176,28 @@ app.post("/create", async (req, res, next) => {
   }
 });
 
+// Delete
+app.delete("/todo", async (req, res, next) => {
+  try {
+    const id = req.body.id ?? "";
+    if (!id) throw new Error("Empty id");
+
+    // Check for existence if data
+    const results = await dbClient.query.todoTable.findMany({
+      where: eq(todoTable.id, id),
+    });
+    if (results.length === 0) throw new Error("Invalid id");
+
+    await dbClient.delete(todoTable).where(eq(todoTable.id, id));
+    res.json({
+      msg: `Delete successfully`,
+      data: { id },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
